@@ -1,0 +1,5 @@
+# Laplace_L1_Robust_Kalman_Filter
+Laplace_L1_Robust_Kalman_Filter
+
+## article 
+https://www.researchgate.net/publication/319370296_Laplace_l1_robust_Kalman_filter_based_on_majorization_minimization
