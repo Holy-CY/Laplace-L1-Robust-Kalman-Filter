@@ -37,7 +37,9 @@ F = [cos(theta) -sin(theta);
 H = [1 1];
  
 % L1 Robust Thuing Parameter
-alpha = 0.0;
+alpha = 0.1;
+W = 1;
+epsilon = 0.000006;
 Error = [0 0]';
 
 tic;
@@ -48,14 +50,22 @@ for i=1 : nSteps
     xTrue = F * xTrue + Q * randn(2, 1);
     z = H * xTrue + (1 - alpha) * R * randn(1, 1) + alpha * R_outlier * randn(1, 1);
     
-    % ------ Kalman Filter --------
+    % ------ Laplace L1 Robust Kalman Filter --------
     % Predict
     xPred = F * xEst;
     PPred = F * PEst * F' + Q;
     
-    % Update
-    K    = (PPred * H') / (H * PPred * H' + R);
-    xEst = xPred + K * (z - H * xPred);
+    while 1
+        % Update
+        R_overline = (sqrt(2) / 2) * sqrt(R) * W * sqrt(R);
+        K    = (PPred * H') / (H * PPred * H' + R_overline);
+        xEst = xPred + K * (z - H * xPred);
+        W = abs(sqrt(R) * (z - H * xPred));
+        if (abs(xTrue(1) - xEst(1)) < 0.2) && (abs(xTrue(2) - xEst(2)) < 0.2)
+            break;
+        end
+    end
+
     PEst = (eye(size(xEst,1)) - K * H) * PPred;
     
     Error(1) = sqrt(mean(xTrue(1) - xEst(1))^2);

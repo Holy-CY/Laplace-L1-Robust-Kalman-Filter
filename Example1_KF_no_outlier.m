@@ -37,7 +37,7 @@ F = [cos(theta) -sin(theta);
 H = [1 1];
  
 % L1 Robust Thuing Parameter
-alpha = 0.0;
+alpha = 0.1;
 Error = [0 0]';
 
 tic;
