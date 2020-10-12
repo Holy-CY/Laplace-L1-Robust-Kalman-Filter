@@ -37,7 +37,7 @@ F = [cos(theta) -sin(theta);
 H = [1 1];
  
 % L1 Robust Thuing Parameter
-alpha = 0.1;
+alpha = 0.2;
 W = 1;
 epsilon = 0.000006;
 Error = [0 0]';
@@ -60,8 +60,8 @@ for i=1 : nSteps
         R_overline = (sqrt(2) / 2) * sqrt(R) * W * sqrt(R);
         K    = (PPred * H') / (H * PPred * H' + R_overline);
         xEst = xPred + K * (z - H * xPred);
-        W = abs(sqrt(R) * (z - H * xPred));
-        if (abs(xTrue(1) - xEst(1)) < 0.2) && (abs(xTrue(2) - xEst(2)) < 0.2)
+        W = abs(sqrt(R) * (z - H * xPred)) + epsilon;
+        if (abs(xTrue(1) - xEst(1)) < 0.3) && (abs(xTrue(2) - xEst(2)) < 0.3)
             break;
         end
     end
